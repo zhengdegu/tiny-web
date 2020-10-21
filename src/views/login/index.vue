@@ -35,7 +35,8 @@
         </el-form-item>
         <el-form-item style="margin-bottom: 60px;text-align: center">
           <el-button style="width: 45%" type="primary" :loading="loading" @click.native.prevent="handleLogin">
-            登录
+            <span v-if="!loading">登 录</span>
+            <span v-else>登 录 中...</span>
           </el-button>
         </el-form-item>
       </el-form>
@@ -46,7 +47,6 @@
 <script>
   import {isvalidUsername} from '@/utils/validate';
   import {setSupport,getSupport,setCookie,getCookie} from '@/utils/support';
-  import login_center_bg from '@/assets/images/login_center_bg.png'
   export default {
     name: 'login',
     data() {
@@ -75,7 +75,6 @@
         },
         loading: false,
         pwdType: 'password',
-        login_center_bg,
         dialogVisible:false,
         supportDialogVisible:false
       }
@@ -132,7 +131,6 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(38, 50, 56, .6);
     overflow: hidden;
     &:before {
       position: fixed;
@@ -148,6 +146,7 @@
   }
   .login-form-layout {
     position: absolute;
+    top: 0;
     left: 0;
     right: 0;
     width: 360px;
