@@ -46,6 +46,7 @@
 
 <script>
   import {isvalidUsername} from '@/utils/validate';
+  import { encrypt } from '@/utils/rsaEncrypt';
   import {setSupport,getSupport,setCookie,getCookie} from '@/utils/support';
   export default {
     name: 'login',
@@ -80,13 +81,14 @@
       }
     },
     created() {
-      this.loginForm.username = getCookie("username");
-      this.loginForm.password = getCookie("password");
-      if(this.loginForm.username === undefined||this.loginForm.username==null||this.loginForm.username===''){
-        this.loginForm.username = 'admin';
-      }
-      if(this.loginForm.password === undefined||this.loginForm.password==null){
-        this.loginForm.password = '';
+      const username = Cookies.get('username')
+      let password = Cookies.get('password')
+      // 保存cookie里面的加密后的密码
+      this.cookiePass = password === undefined ? '' : password
+      password = password === undefined ? this.loginForm.password : password
+      this.loginForm = {
+        username: username === undefined ? this.loginForm.username : username,
+        password: password,
       }
     },
     methods: {
@@ -105,6 +107,9 @@
             //   this.dialogVisible =true;
             //   return;
             // }
+            if (this.loginForm.password !== this.cookiePass){
+              this.loginForm.password =encrypt(this.loginForm.password)
+            }
             this.loading = true;
             this.$store.dispatch('Login', this.loginForm).then(() => {
               this.loading = false;
