@@ -100,6 +100,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/ums/resource/categoryList'),
         meta: {title: '资源分类'},
         hidden: true
+      },
+      {
+        path: 'log',
+        name: 'log',
+        component: () => import('@/views/ums/log/index'),
+        meta: {title: '日志列表',ico: 'ums-log'},
       }
     ]
   },
