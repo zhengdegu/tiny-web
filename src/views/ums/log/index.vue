@@ -95,7 +95,7 @@
       layout="total, sizes,prev, pager, next,jumper"
       :current-page.sync="listQuery.pageNum"
       :page-size="listQuery.pageSize"
-      :page-sizes="[10,15,20]"
+      :page-sizes="[10,20,30]"
       :total="total">
     </el-pagination>
   </div>
@@ -135,11 +135,7 @@
         listLoading: false,
         dialogVisible: false,
         log: Object.assign({}, defaultLog),
-        isEdit: false,
         allocDialogVisible: false,
-        allocRoleIds:[],
-        allRoleList:[],
-        allocAdminId:null
       }
     },
     created() {

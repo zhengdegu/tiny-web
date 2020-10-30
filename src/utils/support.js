@@ -15,3 +15,7 @@ export function setCookie(key,value,expires) {
 export function getCookie(key) {
   return Cookies.get(key)
 }
+
+export function delCookie(key) {
+  return Cookies.get(key)
+}
