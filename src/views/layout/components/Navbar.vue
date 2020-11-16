@@ -13,6 +13,11 @@
             首页
           </el-dropdown-item>
         </router-link>
+        <router-link to="/ums/center">
+          <el-dropdown-item>
+            个人中心
+          </el-dropdown-item>
+        </router-link>
         <el-dropdown-item divided>
           <span @click="logout" style="display:block;">退出</span>
         </el-dropdown-item>
@@ -22,21 +27,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import Avatar from '@/assets/images/avatar.png'
-export default {
-  components: {
-    Breadcrumb,
-    Hamburger
-  },
-  data() {
-    return {
-      Avatar: Avatar
-    }
-  },
-  computed: {
+  import {mapGetters} from 'vuex'
+  import Breadcrumb from '@/components/Breadcrumb'
+  import Hamburger from '@/components/Hamburger'
+  import Avatar from '@/assets/images/avatar.png'
+
+  export default {
+    components: {
+      Breadcrumb,
+      Hamburger
+    },
+    data() {
+      return {
+        Avatar: Avatar
+      }
+    },
+    computed: {
     ...mapGetters([
       'sidebar'
     ])
@@ -46,8 +52,17 @@ export default {
       this.$store.dispatch('ToggleSideBar')
     },
     logout() {
+      this.$confirm('确定注销并退出系统吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.close()
+      })
+    },
+    close() {
       this.$store.dispatch('LogOut').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
+        location.reload()
       })
     }
   }

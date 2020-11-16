@@ -34,6 +34,7 @@
     <div class="table-container">
       <el-table ref="adminTable"
                 :data="list"
+                :rules="rules"
                 style="width: 100%;"
                 v-loading="listLoading" border>
         <el-table-column label="编号" width="100" align="center">
@@ -47,6 +48,9 @@
         </el-table-column>
         <el-table-column label="邮箱" align="center">
           <template slot-scope="scope">{{scope.row.email}}</template>
+        </el-table-column>
+        <el-table-column label="电话" align="center">
+          <template slot-scope="scope">{{scope.row.phone}}</template>
         </el-table-column>
         <el-table-column label="添加时间" width="160" align="center">
           <template slot-scope="scope">{{scope.row.createTime | formatDateTime}}</template>
@@ -100,6 +104,7 @@
       :visible.sync="dialogVisible"
       width="40%">
       <el-form :model="admin"
+               :rules="rules"
                ref="adminForm"
                label-width="150px" size="small">
         <el-form-item label="帐号：">
@@ -111,6 +116,10 @@
         <el-form-item label="邮箱：">
           <el-input v-model="admin.email" style="width: 250px"></el-input>
         </el-form-item>
+        <el-form-item label="电话号码：">
+          <el-input v-model="admin.phone" style="width: 250px"></el-input>
+        </el-form-item>
+
         <el-form-item label="密码：">
           <el-input v-model="admin.password"  type="password" style="width: 250px"></el-input>
         </el-form-item>
@@ -155,7 +164,7 @@
   import {fetchList,createAdmin,updateAdmin,updateStatus,deleteAdmin,getRoleByAdmin,allocRole} from '@/api/login';
   import {fetchAllRoleList} from '@/api/role';
   import {formatDate} from '@/utils/date';
-
+  import { isvalidPhone } from '@/utils/validate'
   const defaultListQuery = {
     pageNum: 1,
     pageSize: 10,
@@ -167,12 +176,23 @@
     password: null,
     nickName: null,
     email: null,
+    phone:null,
     note: null,
     status: 1
   };
   export default {
     name: 'adminList',
     data() {
+      // 自定义验证
+      const validPhone = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请输入电话号码'))
+        } else if (!isvalidPhone(value)) {
+          callback(new Error('请输入正确的11位手机号码'))
+        } else {
+          callback()
+        }
+      }
       return {
         listQuery: Object.assign({}, defaultListQuery),
         list: null,
@@ -184,7 +204,24 @@
         allocDialogVisible: false,
         allocRoleIds:[],
         allRoleList:[],
-        allocAdminId:null
+        allocAdminId:null,
+        rules: {
+          username: [
+            { required: true, message: '请输入用户名', trigger: 'blur' },
+            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          ],
+          nickName: [
+            { required: true, message: '请输入用户昵称', trigger: 'blur' },
+            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          ],
+          email: [
+            { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+          ],
+          phone: [
+            { required: true, trigger: 'blur', validator: validPhone }
+          ]
+        }
       }
     },
     created() {

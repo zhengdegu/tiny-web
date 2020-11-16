@@ -49,6 +49,13 @@ export const asyncRouterMap = [
         meta: {title: '用户列表', icon: 'ums-admin'}
       },
       {
+        path: 'center',
+        name: 'center',
+        component: () => import('@/views/ums/admin/center'),
+        meta: {title: '用户中心'},
+        hidden: true
+      },
+      {
         path: 'role',
         name: 'role',
         component: () => import('@/views/ums/role/index'),
